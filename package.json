@@ -1,0 +1,15 @@
+{
+  "name": "txt2each",
+  "version": "1.0.0",
+  "description": "Simple web-based chat application powered by Express.js and Socket.IO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ronja Blücher Suneson & Freja Törnlund",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3",
+    "socket.io": "^4.7.4"
+  }
+}
