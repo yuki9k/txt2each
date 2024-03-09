@@ -14,11 +14,14 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io();
+        const socket = io();
 
-        // socket.on('connect', () => {
-        //     var user = prompt('Enter username:');
-        // })
+        socket.on('connect', () => {
+            // const userName = prompt('Enter username:');
+
+            // Client sends userName as arg in the 'newUser' event
+            // socket.emit('newUser', user);
+        })
 
     </script>
 </body>

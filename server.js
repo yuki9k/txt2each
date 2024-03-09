@@ -1,29 +1,34 @@
 "use strict";
 
-const EXPRESS = require('express');
-const HTTP = require('http');
+const express = require('express');
+const http = require('http');
 const { Server } = require('socket.io');
 
-const APP = EXPRESS();
+const app = express();
 const PORT = 8080;
 
-const SERVER = HTTP.createServer(APP);
-const IO = new Server(SERVER);
+const server = http.createServer(app);
+const io = new Server(server);
 
-APP.use((req, res, next) => {
+app.use((req, res, next) => {
     console.log('\x1b[93mHTTP\x1b[0m', req.ip, `\x1b[92m${req.method}\x1b[0m`, req.url);
     next();
 });
 
-APP.use(EXPRESS.static('public'));
+app.use(express.static('public'));
 
-IO.on('connection', (socket) => {
+io.on('connection', (socket) => {
     console.log('\x1b[96mWebSocket\x1b[0m', socket.id, '\x1b[92mconnected\x1b[0m');
     socket.on('disconnect', () => {
         console.log('\x1b[96mWebSocket\x1b[0m', socket.id, '\x1b[91mdisconnected\x1b[0m');
-    })
+    });
+
+    // Server listens for event 'newUser', arg is the userName from the client in this case
+    // socket.on('newUser', (arg) => {
+    //     console.log(arg);
+    // })
 });
 
-SERVER.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Listening on port: \x1b[93m${PORT}\x1b[0m`);
 });
