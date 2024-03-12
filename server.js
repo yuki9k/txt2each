@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
     io.emit(
       "renderChat",
       `
-		<p class="chat-msg"> <span style="color:${user.nameColor}">${user.userName}:</span> ${chatMsg}</p>
+		<p class="chat-msg"> <span style="color:${user.nameColor}">${user.userName}</span>: ${chatMsg}</p>
 		`
     );
   });

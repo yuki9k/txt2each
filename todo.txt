@@ -1,1 +1,4 @@
-* Close socket connection on bypass of invalid username
+* Close socket connection on bypass of invalid username　(prevent null)
+* Active user list
+* Choose color after registration
+* Front-end design
