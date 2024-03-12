@@ -1,29 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
     <!-- <link rel="stylesheet" href="style.css"> -->
-</head>
+  </head>
 
-<body>
-    <h1>Hello world!</h1>
+  <body>
+    <h1>Cht!</h1>
+
+    <div id="chat-box"></div>
+    <div id="chat-controls">
+      <input type="text" name="chat-input" id="chat-input" />
+      <button>Send!</button>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+      const socket = io();
+      const chatButton = document.querySelector("#chat-controls>button");
+      const chatInput = document.querySelector("#chat-controls>input");
+      const chatBox = document.querySelector("#chat-box");
 
-        socket.on('connect', () => {
-            // const userName = prompt('Enter username:');
+      chatButton.addEventListener("click", (e) => {
+        const chatText = chatInput.value;
+        socket.emit("sendChat", chatText);
 
-            // Client sends userName as arg in the 'newUser' event
-            // socket.emit('newUser', user);
-        })
+        chatInput.value = "";
+      });
 
+      socket.on("connect", () => {
+        let userName = prompt("Enter username:");
+        if (!userName) {
+          userName = prompt(
+            `${userName} is not a valid username. Enter a new username:`
+          );
+        } else {
+          socket.emit("newUser", userName);
+        }
+      });
+
+      socket.on("renderChat", (msg) => {
+        let div = document.createElement("div");
+        div.innerHTML = msg;
+        chatBox.appendChild(div);
+      });
     </script>
-</body>
-
+  </body>
 </html>

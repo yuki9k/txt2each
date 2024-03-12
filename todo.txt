@@ -1,0 +1,1 @@
+* Close socket connection on bypass of invalid username
