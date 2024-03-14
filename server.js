@@ -17,12 +17,11 @@ app.use((req, res, next) => {
     `\x1b[92m${req.method}\x1b[0m`,
     req.url
   );
-  next();
 });
 
 app.use(express.static("public"));
 
-let users = [];
+const users = new Users();
 
 io.on("connection", (socket) => {
   console.log(
@@ -32,13 +31,16 @@ io.on("connection", (socket) => {
   );
 
   socket.on("newUser", (name) => {
-    const newUser = {
-      id: socket.id,
-      userName: name,
-      nameColor: randomRGB(),
-    };
-    users.push(newUser);
-    console.log(users);
+    // const newUser = {
+    //   id: socket.id,
+    //   userName: name,
+    //   nameColor: randomRGB(),
+    // };
+    // users.push(newUser);
+    // const newUser = new User(socket.id, name, users);
+    users.createUser(socket.id, name);
+    console.log("Created user:", socket.id);
+    console.log(users.connectedUsers);
   });
 
   socket.on("sendChat", (chatMsg) => {
@@ -54,8 +56,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    removeUser(socket.id);
-    console.log("Removed user", socket.id);
+    // removeUser(socket.id);
+    users.destroyUser(socket.id);
+    console.log("Removed user:", socket.id);
+    console.log(users.connectedUsers);
 
     console.log(
       "\x1b[96mWebSocket\x1b[0m",
@@ -69,7 +73,7 @@ server.listen(PORT, () => {
   console.log(`Listening on port: \x1b[93m${PORT}\x1b[0m`);
 });
 
-function randomRGB() {
+function returnRandRgb() {
   let r = Math.floor(Math.random() * 255);
   let g = Math.floor(Math.random() * 255);
   let b = Math.floor(Math.random() * 255);
@@ -77,13 +81,13 @@ function randomRGB() {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-function removeUser(id) {
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].id === id) {
-      users.splice(i, 1);
-    }
-  }
-}
+// function removeUser(id) {
+//   for (let i = 0; i < users.length; i++) {
+//     if (users[i].id === id) {
+//       users.splice(i, 1);
+//     }
+//   }
+// }
 
 function getUser(id) {
   for (let i = 0; i < users.length; i++) {
@@ -91,4 +95,42 @@ function getUser(id) {
       return users[i];
     }
   }
+}
+
+function Users() {
+  this.connectedUsers = [];
+  this.createUser = function (id, name) {
+    this.connectedUsers.push(new User(id, name));
+  };
+  this.destroyUser = function (id) {
+    for (let i = 0; i < this.connectedUsers.length; i++) {
+      if (this.connectedUsers[i].id === id) {
+        this.connectedUsers.splice(i, 1);
+      }
+    }
+  };
+}
+
+function User(id, name) {
+  const randColor = returnRandRgb();
+  this.id = id;
+  this.userName = name;
+  this.nameColor = randColor;
+  // this.sendMsg = function (msg) {};
+  this.changeNameColor = function (r, g, b) {
+    // code to handle arguments ???
+    this.nameColor = `rgb(${r}, ${g}, ${b})`;
+  };
+}
+
+function Chat() {
+  this.chatLog = [];
+  this.renderMsg = function (user, msg) {
+    if (this.chatLog.length > 20) {
+      this.chatLog.splice(0, 1);
+    }
+
+    this.chatLog.push(msg);
+    return {user.userName, nameColor: user.nameColor, msg}
+  };
 }

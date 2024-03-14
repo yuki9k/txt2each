@@ -1,4 +1,9 @@
-* Close socket connection on bypass of invalid username　(prevent null)
-* Active user list
-* Choose color after registration
-* Front-end design
+[] Close socket connection on bypass of invalid username　(prevent null)
+[] Sanitize input
+[] Render active user list
+[] Choose name color after registration
+[] Get latest 20 (?) messages
+[] Front-end
+[] Implement classes cus it would be kinda fun and cool (would it?????) ?????????
+[] Move client-side code to separate client file
+[] Move functions declarations etc out of main server file
