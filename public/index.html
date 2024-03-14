@@ -42,7 +42,15 @@
         }
       });
 
-      socket.on("renderChat", (msg) => {
+      socket.on("renderChatLog", (chatLog) => {
+        for (const chat of chatLog) {
+          let div = document.createElement("div");
+          div.innerHTML = chat;
+          chatBox.appendChild(div);
+        }
+      });
+
+      socket.on("renderMsg", (msg) => {
         let div = document.createElement("div");
         div.innerHTML = msg;
         chatBox.appendChild(div);
