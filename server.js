@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
 
   socket.on("newUser", (name) => {
     io.to(socket.id).emit("renderChatLog", chat.chatLog);
-    chat.users.createUser(socket.id, name);
+    chat.users.createUser(socket.id, new User(name));
     console.log("Created user:", socket.id);
   });
 
@@ -63,7 +63,7 @@ function Chat() {
   this.users = new Users();
   this.chatLog = [];
 
-  this.createMsg = function (id, msg) {
+  this.createMsg = (id, msg) => {
     if (this.chatLog.length > 20) {
       this.chatLog.splice(0, 1);
     }
@@ -76,32 +76,23 @@ function Chat() {
 }
 
 function Users() {
-  this.connectedUsers = [];
+  this.connectedUsers = new Map();
 
-  this.createUser = function (id, name) {
-    this.connectedUsers.push(new User(id, name));
+  this.createUser = (id, obj) => {
+    this.connectedUsers.set(id, obj);
   };
 
-  this.destroyUser = function (id) {
-    for (let i = 0; i < this.connectedUsers.length; i++) {
-      if (this.connectedUsers[i].id === id) {
-        this.connectedUsers.splice(i, 1);
-      }
-    }
+  this.destroyUser = (id) => {
+    this.connectedUsers.delete(id);
   };
 
-  this.getUser = function (id) {
-    for (const user of this.connectedUsers) {
-      if (user.id === id) {
-        return user;
-      }
-    }
+  this.getUser = (id) => {
+    return this.connectedUsers.get(id);
   };
 }
 
-function User(id, name) {
+function User(name) {
   const randColor = returnRandRgb();
-  this.id = id;
   this.userName = name;
   this.nameColor = randColor;
 

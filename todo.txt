@@ -2,8 +2,12 @@
 [] Sanitize input
 [] Render active user list
 [] Choose name color after registration
-[] Get latest 20 (?) messages
+[X] Get latest 20 (?) messages
 [] Front-end
 [] Implement classes cus it would be kinda fun and cool (would it?????) ?????????
 [] Move client-side code to separate client file
-[] Move functions declarations etc out of main server file
+[] Move function declarations etc out of main server file
+[] Implement hashmap for list of connected users
+[] Different rooms users can join?
+- [] Room list?
+[] Add time stamps for chats (maybe if u hover?)
