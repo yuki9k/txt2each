@@ -39,7 +39,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendChat", (incMsg) => {
-    const outMsg = chat.createMsg(socket.id, incMsg);
+    let d = new Date();
+    let hrs = d.getHours();
+    let mins = d.getMinutes();
+    if(hrs.length === 1)
+      hrs = "0" + hrs;
+    if(mins.length === 1)
+      mins = "0" + mins;
+
+    let timeStmp = hrs + ":" + mins;
+    const outMsg = chat.createMsg(socket.id, incMsg, timeStmp);
     io.emit("renderMsg", outMsg);
   });
 
@@ -63,13 +72,13 @@ function Chat() {
   this.users = new Users();
   this.chatLog = [];
 
-  this.createMsg = function (id, msg) {
+  this.createMsg = function (id, msg, timeStmp) {
     if (this.chatLog.length > 20) {
       this.chatLog.splice(0, 1);
     }
 
     const user = this.users.getUser(id);
-    const msgString = `<p class="chat-msg"> <span style="color:${user.nameColor}">${user.userName}</span>: ${msg}</p>`;
+    const msgString = `<p class="chat-msg"> <span style="color:${user.nameColor}">${user.userName}</span>: ${msg} <span class="timeStamp">${timeStmp}</span></p>`;
     this.chatLog.push(msgString);
     return msgString;
   };

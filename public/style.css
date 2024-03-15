@@ -1,0 +1,7 @@
+.timeStamp{
+    opacity: 0;
+    transition: opacity 1s;
+}
+.timeStamp:hover{
+    opacity: 1;
+}
